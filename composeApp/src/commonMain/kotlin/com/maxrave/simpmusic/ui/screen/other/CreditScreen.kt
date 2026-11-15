@@ -1,6 +1,5 @@
 package com.maxrave.simpmusic.ui.screen.other
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.MarqueeAnimationMode
 import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.clickable
@@ -14,10 +13,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LocalMinimumInteractiveComponentSize
@@ -32,7 +29,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextLinkStyles
@@ -45,6 +41,7 @@ import androidx.navigation.NavController
 import com.maxrave.domain.extension.now
 import com.maxrave.simpmusic.expect.openUrl
 import com.maxrave.simpmusic.extension.ultraThinBarStyle
+import com.maxrave.simpmusic.ui.component.CVibeLogoText
 import com.maxrave.simpmusic.ui.component.RippleIconButton
 import com.maxrave.simpmusic.ui.icon.ArrowBackIosNew
 import com.maxrave.simpmusic.ui.icon.SimpIcons
@@ -56,7 +53,6 @@ import dev.chrisbanes.haze.HazeInput
 import dev.chrisbanes.haze.blur.hazeBlur
 import dev.chrisbanes.haze.hazeSource
 import dev.chrisbanes.haze.rememberHazeState
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import simpmusic.composeapp.generated.resources.*
 
@@ -79,15 +75,8 @@ fun CreditScreen(
     ) {
         Spacer(modifier = Modifier.height(30.dp))
 
-        // App icon
-        Image(
-            painter = painterResource(Res.drawable.app_icon),
-            contentDescription = "App Icon",
-            modifier =
-                Modifier
-                    .size(150.dp)
-                    .clip(CircleShape),
-        )
+        // App logo as styled text
+        CVibeLogoText(fontSize = 52.sp)
 
         Spacer(modifier = Modifier.height(30.dp))
 

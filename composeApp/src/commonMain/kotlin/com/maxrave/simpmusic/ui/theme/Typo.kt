@@ -17,12 +17,28 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.sp
 import org.jetbrains.compose.resources.Font
 import simpmusic.composeapp.generated.resources.Res
+import simpmusic.composeapp.generated.resources.black_han_sans_regular
+import simpmusic.composeapp.generated.resources.josefin_sans_regular
 import simpmusic.composeapp.generated.resources.poppins_medium
 
 @Composable
 fun fontFamily(): FontFamily =
     FontFamily(
         Font(Res.font.poppins_medium, FontWeight.Normal, FontStyle.Normal),
+    )
+
+/** Josefin Sans Regular — Century Gothic Light substitute, used for the "C" in the CVIBE logo mark. */
+@Composable
+fun josefinSansFontFamily(): FontFamily =
+    FontFamily(
+        Font(Res.font.josefin_sans_regular, FontWeight.Normal, FontStyle.Normal),
+    )
+
+/** Black Han Sans — Peace Sans substitute (ultra-heavy, squared), used for "vibe" in the CVIBE logo mark. */
+@Composable
+fun blackHanSansFontFamily(): FontFamily =
+    FontFamily(
+        Font(Res.font.black_han_sans_regular, FontWeight.Normal, FontStyle.Normal),
     )
 
 /**
