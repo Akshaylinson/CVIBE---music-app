@@ -23,7 +23,7 @@ plugins {
 val androidAppDir = rootProject.file("androidApp")
 
 android {
-    namespace = "com.maxrave.simpmusic"
+    namespace = "com.codeless.simpmusic"
     compileSdk = 37
 
     defaultConfig {
