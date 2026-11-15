@@ -16,11 +16,11 @@ plugins {
 android {
     val abis = arrayOf("armeabi-v7a", "arm64-v8a", "x86_64")
 
-    namespace = "com.cvibe.music"
+    namespace = "com.codeless.simpmusic"
     compileSdk = 37
 
     defaultConfig {
-        applicationId = "com.cvibe.music"
+        applicationId = "com.codeless.simpmusic"
         minSdk = 26
         targetSdk = 36
         versionCode =
