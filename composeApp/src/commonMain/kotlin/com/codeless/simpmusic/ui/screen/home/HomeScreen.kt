@@ -138,7 +138,6 @@ import com.codeless.simpmusic.ui.component.CreateActions
 import com.codeless.simpmusic.ui.component.DropdownButton
 import com.codeless.simpmusic.ui.component.EndOfPage
 import com.codeless.simpmusic.ui.component.ExpandableChip
-import com.codeless.simpmusic.ui.component.FootgunsStarDialog
 import com.codeless.simpmusic.ui.component.HomeDiscoverSection
 import com.codeless.simpmusic.ui.component.HomeItem
 import com.codeless.simpmusic.ui.component.HomeItemContentPlaylist
@@ -177,7 +176,6 @@ import com.codeless.simpmusic.ui.theme.typo
 import com.codeless.simpmusic.utils.VersionManager
 import com.codeless.simpmusic.utils.eligiblePromos
 import com.codeless.simpmusic.utils.osRequirementOf
-import com.codeless.simpmusic.viewModel.FOOTGUNS_STAR_KEY
 import com.codeless.simpmusic.viewModel.HomeViewModel
 import com.codeless.simpmusic.viewModel.HomeViewModel.Companion.HOME_PARAMS_COMMUTE
 import com.codeless.simpmusic.viewModel.HomeViewModel.Companion.HOME_PARAMS_ENERGIZE
@@ -380,9 +378,6 @@ fun HomeScreen(
     var showBlogPromoDialog by rememberSaveable {
         mutableStateOf(false)
     }
-    var showFootgunsDialog by rememberSaveable {
-        mutableStateOf(false)
-    }
     // Decided once per launch (saveable, so a rotation does not count as a new launch).
     var promoLaunchDecided by rememberSaveable {
         mutableStateOf(false)
@@ -460,16 +455,8 @@ fun HomeScreen(
             if (sharedViewModel.getString(BLOG_PROMO_KEY) != "true") {
                 showBlogPromoDialog = true
             }
-        } else if (openAppTime % 10 == 6 &&
-            openAppTime <= 46 &&
-            sharedViewModel.getString(FOOTGUNS_STAR_KEY) != "true"
-        ) {
-            // kotlin-footguns star prompt: 6, 16, 26, 36, 46 - one open after each review milestone,
-            // and clear of the share-lyrics (15, 45) and blog-promo (5) milestones
-            showFootgunsDialog = true
         } else {
             showReviewDialog = false
-            showFootgunsDialog = false
             showRequestShareLyricsPermissions = false
         }
     }
@@ -523,23 +510,6 @@ fun HomeScreen(
         )
     }
 
-    if (showFootgunsDialog) {
-        FootgunsStarDialog(
-            onDismissRequest = {
-                // "Later" advances OPEN_APP_TIME, the same way the review and share-lyrics dialogs do.
-                // Home's launch effect runs again every time Home re-enters composition, reading the
-                // stored count; leaving it untouched kept the milestone condition true, so the prompt
-                // came back on every return to Home until the app was restarted.
-                showFootgunsDialog = false
-                sharedViewModel.onDoneReview(isDismissOnly = true)
-            },
-            onDoneStar = {
-                sharedViewModel.putString(FOOTGUNS_STAR_KEY, "true")
-                showFootgunsDialog = false
-            },
-        )
-    }
-
     if (showBlogPromoDialog) {
         BlogPromoDialog(
             onDismissRequest = {
@@ -571,7 +541,7 @@ fun HomeScreen(
 
     val otherDialogOpen =
         appDialogOpen || showReviewDialog || showRequestShareLyricsPermissions || showBlogPromoDialog ||
-            showFootgunsDialog || shouldShowLogInAlert
+            shouldShowLogInAlert
     // The launch banner, decided once per launch. It waits for Home to settle on its own dialogs (the
     // open count and the lyrics-sharing flag load just after the first frame) and for the update check
     // started at launch, however long that takes, so an update dialog comes first. Then it takes the

@@ -219,6 +219,12 @@ img { display: block; max-width: 100%; }
   margin-top: -32px;
   margin-bottom: 48px;
 }
+.release-status {
+  font-size: 0.84rem;
+  color: var(--ink-soft);
+  margin-top: -32px;
+  margin-bottom: 24px;
+}
 
 /* ── About ────────────────────────────────────────────────── */
 .about-grid {
@@ -305,7 +311,14 @@ img { display: block; max-width: 100%; }
 }
 .dl-icon { color: var(--ink-mid); }
 .download-card h3 { font-size: 1.05rem; font-weight: 700; letter-spacing: -0.02em; }
-.download-card p { font-size: 0.82rem; color: var(--ink-soft); flex: 1; }
+.download-card p { font-size: 0.82rem; color: var(--ink-soft); }
+.download-card > p:not(.download-meta) { flex: 1; }
+.download-card .download-meta {
+  flex: 0;
+  min-height: 1.4em;
+  margin-top: -4px;
+  overflow-wrap: anywhere;
+}
 
 /* ── FAQ ──────────────────────────────────────────────────── */
 .faq-list { display: flex; flex-direction: column; gap: 0; }

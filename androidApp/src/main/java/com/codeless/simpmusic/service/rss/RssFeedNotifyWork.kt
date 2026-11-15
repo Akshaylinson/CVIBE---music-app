@@ -139,7 +139,7 @@ class RssFeedNotifyWork(
         return items
     }
 
-    // Rows pushed before the feed moved to simpmusic.org hold the post's old maxrave.dev link.
+    // Rows pushed before the C-Vibe feed moved here can still hold the upstream post URL.
     private suspend fun isPushed(
         link: String,
         slug: String,
@@ -170,7 +170,7 @@ class RssFeedNotifyWork(
 
     companion object {
         private const val TAG = "RssFeedNotifyWork"
-        const val FEED_URL = "https://www.simpmusic.org/rss.xml"
+        const val FEED_URL = "https://cvibe.codelessai.in/rss.xml"
 
         // The only link form the old maxrave.dev feed served: https://maxrave.dev/articles/<slug>.
         private const val LEGACY_POST_URL = "https://maxrave.dev/articles/"
