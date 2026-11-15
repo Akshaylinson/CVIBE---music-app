@@ -97,9 +97,11 @@ conveyor = "2.0"
 # Login sync: QR encode (Desktop) + decode (Android), and the Android scanner's camera
 zxing = "3.5.4"
 camerax = "1.6.2"
+kaml = "0.79.0"
 
 [libraries]
 zxing-core = { module = "com.google.zxing:core", version.ref = "zxing" }
+kotaml = { module = "com.charleskorn.kaml:kaml", version.ref = "kaml" }
 camera-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "camerax" }
 camera-lifecycle = { module = "androidx.camera:camera-lifecycle", version.ref = "camerax" }
 camera-view = { module = "androidx.camera:camera-view", version.ref = "camerax" }
