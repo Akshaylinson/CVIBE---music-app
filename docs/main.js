@@ -2,6 +2,45 @@
 const yearEl = document.getElementById('footer-year');
 if (yearEl) yearEl.textContent = new Date().getFullYear();
 
+// Mobile navigation drawer
+const navToggle = document.querySelector('.nav-toggle');
+const mobileMenu = document.querySelector('.mobile-menu');
+const mobileMenuBackdrop = document.querySelector('.mobile-menu-backdrop');
+const mobileMenuClose = document.querySelector('.mobile-menu-close');
+
+function closeMobileMenu({ returnFocus = true } = {}) {
+  if (!navToggle || !mobileMenu || !mobileMenuBackdrop) return;
+  mobileMenu.classList.remove('is-open');
+  navToggle.setAttribute('aria-expanded', 'false');
+  mobileMenu.setAttribute('aria-hidden', 'true');
+  document.body.classList.remove('menu-open');
+  window.setTimeout(() => {
+    if (!mobileMenu.classList.contains('is-open')) mobileMenuBackdrop.hidden = true;
+  }, 280);
+  if (returnFocus) navToggle.focus();
+}
+
+function openMobileMenu() {
+  if (!navToggle || !mobileMenu || !mobileMenuBackdrop) return;
+  mobileMenuBackdrop.hidden = false;
+  mobileMenu.setAttribute('aria-hidden', 'false');
+  navToggle.setAttribute('aria-expanded', 'true');
+  document.body.classList.add('menu-open');
+  requestAnimationFrame(() => mobileMenu.classList.add('is-open'));
+  mobileMenuClose?.focus();
+}
+
+navToggle?.addEventListener('click', () => {
+  if (mobileMenu?.classList.contains('is-open')) closeMobileMenu();
+  else openMobileMenu();
+});
+mobileMenuClose?.addEventListener('click', () => closeMobileMenu());
+mobileMenuBackdrop?.addEventListener('click', () => closeMobileMenu());
+mobileMenu?.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => closeMobileMenu({ returnFocus: false })));
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape' && mobileMenu?.classList.contains('is-open')) closeMobileMenu();
+});
+
 // GitHub Releases is the static site's release backend: the public API returns the current
 // release and its downloadable assets with CORS enabled, so GitHub Pages needs no server code.
 const RELEASE_REPOSITORY = 'Akshaylinson/CVIBE---music-app';
@@ -10,15 +49,18 @@ const LATEST_RELEASE_API = `https://api.github.com/repos/${RELEASE_REPOSITORY}/r
 
 const platformMatchers = {
   android: (name) => name.endsWith('.apk'),
-  windows: (name) => name.endsWith('.exe') || name.endsWith('.msi'),
-  macos: (name) => name.endsWith('.dmg') || name.endsWith('.pkg'),
+  // The current Conveyor packaging tasks produce .msix on Windows and
+  // unnotarized .zip archives on macOS. Keep the conventional installer
+  // formats too, so future signed .exe/.dmg releases work without a site edit.
+  windows: (name) => name.endsWith('.exe') || name.endsWith('.msi') || name.endsWith('.msix'),
+  macos: (name) => name.endsWith('.dmg') || name.endsWith('.pkg') || name.endsWith('.zip'),
   linux: (name) => name.endsWith('.appimage') || name.endsWith('.deb') || name.endsWith('.rpm') || name.endsWith('.tar.gz'),
 };
 
 const platformLabels = {
   android: 'Download APK',
-  windows: 'Download installer',
-  macos: 'Download DMG',
+  windows: 'Download for Windows',
+  macos: 'Download for macOS',
   linux: 'Download for Linux',
 };
 
@@ -61,6 +103,14 @@ async function loadReleaseDownloads() {
     const response = await fetch(LATEST_RELEASE_API, {
       headers: { Accept: 'application/vnd.github+json' },
     });
+    // A project without a published release (and private repositories when
+    // queried anonymously from GitHub Pages) returns 404. This is an expected
+    // empty-download state, not a browser error.
+    if (response.status === 404) {
+      Object.keys(platformMatchers).forEach((platform) => setPlatformDownload(platform, null, RELEASES_PAGE));
+      status.textContent = 'Downloads will appear here when the first CVIBE release is published.';
+      return;
+    }
     if (!response.ok) throw new Error(`GitHub Releases returned ${response.status}`);
 
     const release = await response.json();
